@@ -190,85 +190,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(waffle)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>afc <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"defense.csv"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>afc <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"defense.csv"</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>afcdef <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Kansas City Chiefs"</span>, <span class="st">"Miami Dolphins"</span>, <span class="st">"Baltimore Ravens"</span>, <span class="st">"Jacksonville Jaguars"</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>defyards <span class="ot">&lt;-</span> afc <span class="sc">|&gt;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    Team, PassYds, RushYds</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Team <span class="sc">%in%</span> afcdef)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>kcwaffle <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Rushing"</span><span class="ot">=</span><span class="dv">1247</span>, <span class="st">"Passing"</span><span class="ot">=</span><span class="dv">1943</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>mdwaffle <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Rushing"</span><span class="ot">=</span><span class="dv">1021</span>, <span class="st">"Passing"</span><span class="ot">=</span><span class="dv">2336</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>brwaffle <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Rushing"</span><span class="ot">=</span><span class="dv">1227</span>, <span class="st">"Passing"</span><span class="ot">=</span><span class="dv">2060</span>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>jjwaffle <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Rushing"</span><span class="ot">=</span><span class="dv">961</span>, <span class="st">"Passing"</span><span class="ot">=</span><span class="dv">2805</span>)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">iron</span>(</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">waffle</span>(</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  kcwaffle<span class="sc">/</span><span class="dv">20</span>,</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows=</span><span class="dv">10</span>,</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span> <span class="st">"1 square = 10 yards"</span>,</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"#FFD300"</span>)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average Chiefs Struggle for Dominance in AFC.</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="st">    "</span>,</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"The Jaguars are out for revenge allowing less than 1000 rushing yards by week 12."</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>afc <span class="sc">|&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    Team, YdsPass, YdsRush</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">cols=</span><span class="fu">starts_with</span>(<span class="st">"Yds"</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">names_to=</span><span class="st">"Type"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">values_to=</span><span class="st">"Yards"</span>) <span class="ot">-&gt;</span> afcwide </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">data=</span>afcwide,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Team, Yards),</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">weight=</span>Yards, <span class="at">fill=</span> Type)) <span class="sc">+</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"orangered1"</span>, <span class="st">"orange2"</span>)) <span class="sc">+</span> </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Chiefs Dominate Defensively, Rank 3rd Overall in Yards Per Play."</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"The Jaguars are out for revenge allowing less than 1,000 rushing yards by week 12."</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: Pro Football Reference | By: Lauren Aleknavicius"</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span> <span class="st">"Defensive Yards Per Play"</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">""</span></span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span><span class="st">"bold"</span>),</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>)</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span><span class="fu">guide_legend</span>(<span class="at">title=</span><span class="st">"Kansas City Chiefs"</span>)),</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="fu">waffle</span>(</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  mdwaffle<span class="sc">/</span><span class="dv">20</span>,</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows=</span><span class="dv">10</span>,</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span> <span class="st">"1 square = 10 yards"</span>,</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"cyan3"</span>)</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span><span class="fu">guide_legend</span>(<span class="at">title=</span><span class="st">"Miami Dolphins"</span>)),</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="fu">waffle</span>(</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  brwaffle<span class="sc">/</span><span class="dv">20</span>,</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows=</span><span class="dv">10</span>,</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span> <span class="st">"1 square = 10 yards"</span>,</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"#241773"</span>, <span class="st">"black"</span>)</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span> </span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span><span class="fu">guide_legend</span>(<span class="at">title=</span><span class="st">"Baltimore Ravens"</span>)),</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="fu">waffle</span> (</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a> jjwaffle<span class="sc">/</span><span class="dv">20</span>,</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> <span class="dv">10</span>, </span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span> <span class="st">"1 square = 10 yards"</span>,</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"#9F792C"</span>, <span class="st">"#006778"</span>)</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: Pro Football Reference | By: Lauren Aleknavicius"</span></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span><span class="fu">guide_legend</span>(<span class="at">title=</span><span class="st">"Jacksonville Jaguars"</span>))</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span><span class="st">"bold"</span>),</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="768"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>The Chiefs offense has been yet to have solid starting game. They have been seeming to pick up speed later this season. Patrick Mahomes has started every game this season at quarterback, unlike the previous season due to an injury. Mahomes is considered one of the best quarterbacks min the league.</p>
-<p>Although — The Los Angeles Rams, Cincinnati Bengals, Tampa Bay Buccaneers, Philadelphia Eagles, and San Francisco 49ers have all appeared in the Super Bowl within the past four seasons. On the other hand, The New York Jets and Cleveland Browns have been consistently the worst on offense. Let’s look at passing completion by various teams.</p>
+<p>Although the AFC West is relatively good at passing this season, there are several teams in the hunt that are not. The Cincinnati Bengals, Tampa Bay Buccaneers, Philadelphia Eagles, and San Francisco 49ers have all appeared in the Super Bowl within the past four seasons. Each team has been a force to be reckon with. On the other hand, The New York Jets and Cleveland Browns have been consistently the worst on offense. Let’s look at passing completion by various teams.</p>
 <p>Completed passes and total pass attempts compile together to create a completion percentage. How do the Chiefs compare to the other leaders in the AFC and previous Super Bowl contenders?</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>passing <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"offensepass.csv"</span>)</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>passing <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"offensepass.csv"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>nfloff <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Kansas City Chiefs"</span>, <span class="st">"Miami Dolphins"</span>, <span class="st">"Baltimore Ravens"</span>, <span class="st">"Jacksonville Jaguars"</span>, <span class="st">"Philadelphia Eagles"</span>, <span class="st">"Los Angeles Rams"</span>, <span class="st">"Cincinnati Bengals"</span>, <span class="st">"Tampa Bay Buccaneers"</span>, <span class="st">"San Francisco 49ers"</span>, <span class="st">"New York Jets"</span>, <span class="st">"Cleveland Browns"</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -278,27 +248,88 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Team <span class="sc">%in%</span> nfloff)</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>offpass <span class="sc">%&gt;%</span> <span class="fu">gt</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>offpass <span class="sc">|&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Cmp =</span> <span class="st">"Completed"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Att =</span> <span class="st">"Attempted"</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">CmpPct =</span> <span class="st">"Completion Percentage"</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>   <span class="fu">tab_header</span>(</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"AFC West Dominance Shines: Teams Lead the League."</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"The Dolphins lead the AFC in offensive yards per play, but the Chiefs are just average."</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_source_note</span>( <span class="at">source_note =</span> <span class="fu">md</span>(<span class="st">"**By:** Lauren Aleknavicius | **Source:** Pro Football Reference"</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">cell_text</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">weight =</span> <span class="st">"bold"</span>, <span class="at">align =</span> <span class="st">"left"</span>), <span class="at">locations =</span> <span class="fu">cells_title</span>(<span class="st">"title"</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">cell_text</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">align =</span> <span class="st">"left"</span>),</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>(<span class="st">"subtitle"</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_style</span>(</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> <span class="fu">everything</span>()),</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>          <span class="fu">cell_borders</span>(<span class="at">sides =</span> <span class="st">"bottom"</span>, <span class="at">weight =</span> <span class="fu">px</span>(<span class="dv">3</span>)),</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>          <span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>, <span class="at">size=</span><span class="dv">12</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">|&gt;</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">opt_row_striping</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">opt_table_lines</span>(<span class="st">"none"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>   <span class="fu">tab_style</span>(</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"red"</span>),</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_text</span>(<span class="at">color =</span> <span class="st">"gold"</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> Team <span class="sc">==</span> <span class="st">"Kansas City Chiefs"</span>)</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>   <span class="fu">tab_style</span>(</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#241773"</span>),</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_text</span>(<span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> Team <span class="sc">==</span> <span class="st">"Baltimore Ravens"</span>)</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>   <span class="fu">tab_style</span>(</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"cyan4"</span>),</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_text</span>(<span class="at">color =</span> <span class="st">"orange"</span>)</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> Team <span class="sc">==</span> <span class="st">"Miami Dolphins"</span>)</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>   <span class="fu">tab_style</span>(</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"gold"</span>),</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_text</span>(<span class="at">color =</span> <span class="st">"#006778"</span>)</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> Team <span class="sc">==</span> <span class="st">"Jacksonville Jaguars"</span>)</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 
-<div id="wszwoqgkjy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wszwoqgkjy table {
+<div id="hzfbfxybwn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hzfbfxybwn table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#wszwoqgkjy thead, #wszwoqgkjy tbody, #wszwoqgkjy tfoot, #wszwoqgkjy tr, #wszwoqgkjy td, #wszwoqgkjy th {
+#hzfbfxybwn thead, #hzfbfxybwn tbody, #hzfbfxybwn tfoot, #hzfbfxybwn tr, #hzfbfxybwn td, #hzfbfxybwn th {
   border-style: none;
 }
 
-#wszwoqgkjy p {
+#hzfbfxybwn p {
   margin: 0;
   padding: 0;
 }
 
-#wszwoqgkjy .gt_table {
+#hzfbfxybwn .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -307,16 +338,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   color: #333333;
   font-size: 16px;
   font-weight: normal;
-  font-style: normal;
+  font-style: none;
   background-color: #FFFFFF;
   width: auto;
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
   border-right-style: none;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
-  border-bottom-style: solid;
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
   border-left-style: none;
@@ -324,12 +355,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_caption {
+#hzfbfxybwn .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wszwoqgkjy .gt_title {
+#hzfbfxybwn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -341,7 +372,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#wszwoqgkjy .gt_subtitle {
+#hzfbfxybwn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -353,7 +384,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#wszwoqgkjy .gt_heading {
+#hzfbfxybwn .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -365,17 +396,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_bottom_border {
-  border-bottom-style: solid;
+#hzfbfxybwn .gt_bottom_border {
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_col_headings {
-  border-top-style: solid;
+#hzfbfxybwn .gt_col_headings {
+  border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
-  border-bottom-style: solid;
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
   border-left-style: none;
@@ -386,7 +417,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_col_heading {
+#hzfbfxybwn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -406,7 +437,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#wszwoqgkjy .gt_column_spanner_outer {
+#hzfbfxybwn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -418,16 +449,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#wszwoqgkjy .gt_column_spanner_outer:first-child {
+#hzfbfxybwn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wszwoqgkjy .gt_column_spanner_outer:last-child {
+#hzfbfxybwn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wszwoqgkjy .gt_column_spanner {
-  border-bottom-style: solid;
+#hzfbfxybwn .gt_column_spanner {
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
   vertical-align: bottom;
@@ -438,11 +469,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#wszwoqgkjy .gt_spanner_row {
+#hzfbfxybwn .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#wszwoqgkjy .gt_group_heading {
+#hzfbfxybwn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -452,10 +483,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
-  border-bottom-style: solid;
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
   border-left-style: none;
@@ -468,36 +499,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#wszwoqgkjy .gt_empty_group_heading {
+#hzfbfxybwn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
   font-weight: initial;
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
-  border-bottom-style: solid;
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
 
-#wszwoqgkjy .gt_from_md > :first-child {
+#hzfbfxybwn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wszwoqgkjy .gt_from_md > :last-child {
+#hzfbfxybwn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wszwoqgkjy .gt_row {
+#hzfbfxybwn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 1px;
   border-top-color: #D3D3D3;
   border-left-style: none;
@@ -510,26 +541,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#wszwoqgkjy .gt_stub {
+#hzfbfxybwn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
-  border-right-style: solid;
+  border-right-style: none;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#wszwoqgkjy .gt_stub_row_group {
+#hzfbfxybwn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
-  border-right-style: solid;
+  border-right-style: none;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
   padding-left: 5px;
@@ -537,15 +568,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#wszwoqgkjy .gt_row_group_first td {
+#hzfbfxybwn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wszwoqgkjy .gt_row_group_first th {
+#hzfbfxybwn .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#wszwoqgkjy .gt_summary_row {
+#hzfbfxybwn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -555,26 +586,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#wszwoqgkjy .gt_first_summary_row {
-  border-top-style: solid;
+#hzfbfxybwn .gt_first_summary_row {
+  border-top-style: none;
   border-top-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_first_summary_row.thick {
+#hzfbfxybwn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wszwoqgkjy .gt_last_summary_row {
+#hzfbfxybwn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
-  border-bottom-style: solid;
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_grand_summary_row {
+#hzfbfxybwn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -584,40 +615,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#wszwoqgkjy .gt_first_grand_summary_row {
+#hzfbfxybwn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
-  border-top-style: double;
+  border-top-style: none;
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_last_grand_summary_row_top {
+#hzfbfxybwn .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
-  border-bottom-style: double;
+  border-bottom-style: none;
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_striped {
+#hzfbfxybwn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wszwoqgkjy .gt_table_body {
-  border-top-style: solid;
+#hzfbfxybwn .gt_table_body {
+  border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
-  border-bottom-style: solid;
+  border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_footnotes {
+#hzfbfxybwn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -631,7 +662,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_footnote {
+#hzfbfxybwn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -640,7 +671,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#wszwoqgkjy .gt_sourcenotes {
+#hzfbfxybwn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -654,7 +685,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#wszwoqgkjy .gt_sourcenote {
+#hzfbfxybwn .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -662,641 +693,190 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#wszwoqgkjy .gt_left {
+#hzfbfxybwn .gt_left {
   text-align: left;
 }
 
-#wszwoqgkjy .gt_center {
+#hzfbfxybwn .gt_center {
   text-align: center;
 }
 
-#wszwoqgkjy .gt_right {
+#hzfbfxybwn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wszwoqgkjy .gt_font_normal {
+#hzfbfxybwn .gt_font_normal {
   font-weight: normal;
 }
 
-#wszwoqgkjy .gt_font_bold {
+#hzfbfxybwn .gt_font_bold {
   font-weight: bold;
 }
 
-#wszwoqgkjy .gt_font_italic {
+#hzfbfxybwn .gt_font_italic {
   font-style: italic;
 }
 
-#wszwoqgkjy .gt_super {
+#hzfbfxybwn .gt_super {
   font-size: 65%;
 }
 
-#wszwoqgkjy .gt_footnote_marks {
+#hzfbfxybwn .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#wszwoqgkjy .gt_asterisk {
+#hzfbfxybwn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wszwoqgkjy .gt_indent_1 {
+#hzfbfxybwn .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wszwoqgkjy .gt_indent_2 {
+#hzfbfxybwn .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wszwoqgkjy .gt_indent_3 {
+#hzfbfxybwn .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wszwoqgkjy .gt_indent_4 {
+#hzfbfxybwn .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wszwoqgkjy .gt_indent_5 {
+#hzfbfxybwn .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
 <table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
   <thead>
-    
+    <tr class="gt_heading">
+      <td colspan="4" class="gt_heading gt_title gt_font_normal" style="color: #000000; text-align: left; font-weight: bold;">AFC West Dominance Shines: Teams Lead the League.</td>
+    </tr>
+    <tr class="gt_heading">
+      <td colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="color: #000000; text-align: left;">The Dolphins lead the AFC in offensive yards per play, but the Chiefs are just average.</td>
+    </tr>
     <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Team">Team</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Cmp">Cmp</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Att">Att</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="CmpPct">CmpPct</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: #000000; font-size: 12; font-weight: bold;" scope="col" id="Team">Team</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: #000000; font-size: 12; font-weight: bold;" scope="col" id="Completed">Completed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: #000000; font-size: 12; font-weight: bold;" scope="col" id="Attempted">Attempted</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: #000000; font-size: 12; font-weight: bold;" scope="col" id="Completion Percentage">Completion Percentage</th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="Team" class="gt_row gt_left">Miami Dolphins</td>
-<td headers="Cmp" class="gt_row gt_right">265</td>
-<td headers="Att" class="gt_row gt_right">380</td>
-<td headers="CmpPct" class="gt_row gt_right">69.7</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Kansas City Chiefs</td>
-<td headers="Cmp" class="gt_row gt_right">283</td>
-<td headers="Att" class="gt_row gt_right">417</td>
-<td headers="CmpPct" class="gt_row gt_right">67.9</td></tr>
+    <tr><td headers="Team" class="gt_row gt_left" style="background-color: #008B8B; color: #FFA500;">Miami Dolphins</td>
+<td headers="Cmp" class="gt_row gt_right" style="background-color: #008B8B; color: #FFA500;">265</td>
+<td headers="Att" class="gt_row gt_right" style="background-color: #008B8B; color: #FFA500;">380</td>
+<td headers="CmpPct" class="gt_row gt_right" style="background-color: #008B8B; color: #FFA500;">69.7</td></tr>
+    <tr><td headers="Team" class="gt_row gt_left gt_striped" style="background-color: #FF0000; color: #FFD700;">Kansas City Chiefs</td>
+<td headers="Cmp" class="gt_row gt_right gt_striped" style="background-color: #FF0000; color: #FFD700;">283</td>
+<td headers="Att" class="gt_row gt_right gt_striped" style="background-color: #FF0000; color: #FFD700;">417</td>
+<td headers="CmpPct" class="gt_row gt_right gt_striped" style="background-color: #FF0000; color: #FFD700;">67.9</td></tr>
     <tr><td headers="Team" class="gt_row gt_left">San Francisco 49ers</td>
 <td headers="Cmp" class="gt_row gt_right">216</td>
 <td headers="Att" class="gt_row gt_right">309</td>
 <td headers="CmpPct" class="gt_row gt_right">69.9</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Jacksonville Jaguars</td>
-<td headers="Cmp" class="gt_row gt_right">254</td>
-<td headers="Att" class="gt_row gt_right">377</td>
-<td headers="CmpPct" class="gt_row gt_right">67.4</td></tr>
+    <tr><td headers="Team" class="gt_row gt_left gt_striped" style="background-color: #FFD700; color: #006778;">Jacksonville Jaguars</td>
+<td headers="Cmp" class="gt_row gt_right gt_striped" style="background-color: #FFD700; color: #006778;">254</td>
+<td headers="Att" class="gt_row gt_right gt_striped" style="background-color: #FFD700; color: #006778;">377</td>
+<td headers="CmpPct" class="gt_row gt_right gt_striped" style="background-color: #FFD700; color: #006778;">67.4</td></tr>
     <tr><td headers="Team" class="gt_row gt_left">Philadelphia Eagles</td>
 <td headers="Cmp" class="gt_row gt_right">242</td>
 <td headers="Att" class="gt_row gt_right">358</td>
 <td headers="CmpPct" class="gt_row gt_right">67.6</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Los Angeles Rams</td>
-<td headers="Cmp" class="gt_row gt_right">226</td>
-<td headers="Att" class="gt_row gt_right">380</td>
-<td headers="CmpPct" class="gt_row gt_right">59.5</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Baltimore Ravens</td>
-<td headers="Cmp" class="gt_row gt_right">233</td>
-<td headers="Att" class="gt_row gt_right">342</td>
-<td headers="CmpPct" class="gt_row gt_right">68.1</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Tampa Bay Buccaneers</td>
-<td headers="Cmp" class="gt_row gt_right">246</td>
-<td headers="Att" class="gt_row gt_right">382</td>
-<td headers="CmpPct" class="gt_row gt_right">64.4</td></tr>
+    <tr><td headers="Team" class="gt_row gt_left gt_striped">Los Angeles Rams</td>
+<td headers="Cmp" class="gt_row gt_right gt_striped">226</td>
+<td headers="Att" class="gt_row gt_right gt_striped">380</td>
+<td headers="CmpPct" class="gt_row gt_right gt_striped">59.5</td></tr>
+    <tr><td headers="Team" class="gt_row gt_left" style="background-color: #241773; color: #FFFFFF;">Baltimore Ravens</td>
+<td headers="Cmp" class="gt_row gt_right" style="background-color: #241773; color: #FFFFFF;">233</td>
+<td headers="Att" class="gt_row gt_right" style="background-color: #241773; color: #FFFFFF;">342</td>
+<td headers="CmpPct" class="gt_row gt_right" style="background-color: #241773; color: #FFFFFF;">68.1</td></tr>
+    <tr><td headers="Team" class="gt_row gt_left gt_striped">Tampa Bay Buccaneers</td>
+<td headers="Cmp" class="gt_row gt_right gt_striped">246</td>
+<td headers="Att" class="gt_row gt_right gt_striped">382</td>
+<td headers="CmpPct" class="gt_row gt_right gt_striped">64.4</td></tr>
     <tr><td headers="Team" class="gt_row gt_left">Cincinnati Bengals</td>
 <td headers="Cmp" class="gt_row gt_right">271</td>
 <td headers="Att" class="gt_row gt_right">406</td>
 <td headers="CmpPct" class="gt_row gt_right">66.7</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Cleveland Browns</td>
-<td headers="Cmp" class="gt_row gt_right">217</td>
-<td headers="Att" class="gt_row gt_right">391</td>
-<td headers="CmpPct" class="gt_row gt_right">55.5</td></tr>
+    <tr><td headers="Team" class="gt_row gt_left gt_striped">Cleveland Browns</td>
+<td headers="Cmp" class="gt_row gt_right gt_striped">217</td>
+<td headers="Att" class="gt_row gt_right gt_striped">391</td>
+<td headers="CmpPct" class="gt_row gt_right gt_striped">55.5</td></tr>
     <tr><td headers="Team" class="gt_row gt_left">New York Jets</td>
 <td headers="Cmp" class="gt_row gt_right">225</td>
 <td headers="Att" class="gt_row gt_right">376</td>
 <td headers="CmpPct" class="gt_row gt_right">59.8</td></tr>
   </tbody>
-  
+  <tfoot class="gt_sourcenotes">
+    <tr>
+      <td class="gt_sourcenote" colspan="4"><strong>By:</strong> Lauren Aleknavicius | <strong>Source:</strong> Pro Football Reference</td>
+    </tr>
+  </tfoot>
   
 </table>
 </div>
 </div>
+</div>
+<p>All four of the AFC West teams are dominating on offensive and defensive yards per play.</p>
+<p>The Jaguars are furthest behind the rest of the pack; however, they are still no where near the worst in the league. With a powerhouse of an offensive and an indestructible defense the Kansas City Chiefs are playing at the top of the league.</p>
+<div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>offpass <span class="sc">%&gt;%</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Cmp =</span> <span class="st">"Completed"</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Att =</span> <span class="st">"Attempted"</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">CmpPct =</span> <span class="st">"Completion Percentage"</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>YPP <span class="ot">&lt;-</span> <span class="fu">read_csv</span> (<span class="st">"ypp.csv"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>kcypp <span class="ot">&lt;-</span> YPP <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Team <span class="sc">==</span> <span class="st">"Kansas City Chiefs"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>jjypp <span class="ot">&lt;-</span> YPP <span class="sc">|&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Team <span class="sc">==</span> <span class="st">"Jacksonville Jaguars"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>brypp <span class="ot">&lt;-</span> YPP <span class="sc">|&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Team <span class="sc">==</span> <span class="st">"Baltimore Ravens"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>mdypp <span class="ot">&lt;-</span> YPP <span class="sc">|&gt;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Team <span class="sc">==</span> <span class="st">"Miami Dolphins"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">data=</span>YPP, <span class="fu">aes</span>(<span class="at">x=</span>OffYPP, <span class="at">y=</span>DefYPP)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a> <span class="fu">geom_point</span>(<span class="at">data=</span>kcypp, <span class="fu">aes</span>(<span class="at">x=</span>OffYPP, <span class="at">y=</span>DefYPP), <span class="at">color=</span><span class="st">"red"</span>, ) <span class="sc">+</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>jjypp, <span class="fu">aes</span>(<span class="at">x=</span>OffYPP, <span class="at">y=</span>DefYPP), <span class="at">color=</span><span class="st">"#006778"</span>)  <span class="sc">+</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>brypp, <span class="fu">aes</span>(<span class="at">x=</span>OffYPP, <span class="at">y=</span>DefYPP), <span class="at">color=</span><span class="st">"#241773"</span>) <span class="sc">+</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>mdypp, <span class="fu">aes</span>(<span class="at">x=</span>OffYPP, <span class="at">y=</span>DefYPP), <span class="at">color=</span><span class="st">"orange"</span>) <span class="sc">+</span> </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="at">data=</span>kcypp, <span class="fu">aes</span>(<span class="at">x=</span>OffYPP, <span class="at">y=</span>DefYPP, <span class="at">label=</span><span class="st">"Kansas City Chiefs"</span>), <span class="at">size=</span><span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="at">data=</span>jjypp, <span class="fu">aes</span>(<span class="at">x=</span>OffYPP, <span class="at">y=</span>DefYPP, <span class="at">label=</span><span class="st">"Jacksonville Jaguars"</span>), <span class="at">size=</span><span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="at">data=</span>brypp, <span class="fu">aes</span>(<span class="at">x=</span>OffYPP, <span class="at">y=</span>DefYPP, <span class="at">label=</span><span class="st">"Baltimore Ravens"</span>), <span class="at">size=</span><span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="at">data=</span>mdypp, <span class="fu">aes</span>(<span class="at">x=</span>OffYPP, <span class="at">y=</span>DefYPP, <span class="at">label=</span><span class="st">"Miami Dolphins"</span>), <span class="at">size=</span><span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"AFC West Dominance Shines: Teams Lead the League."</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"The Dolphins lead the AFC in offensive yards per play, but the Chiefs are just average."</span>,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: Pro Football Reference | By: Lauren Aleknavicius "</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span> <span class="st">"Offensive Yards Per Play"</span>,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span> <span class="st">"Defensive Yards Per Play"</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span><span class="st">"bold"</span>),</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-
-<div id="phjiwacvbw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#phjiwacvbw table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#phjiwacvbw thead, #phjiwacvbw tbody, #phjiwacvbw tfoot, #phjiwacvbw tr, #phjiwacvbw td, #phjiwacvbw th {
-  border-style: none;
-}
-
-#phjiwacvbw p {
-  margin: 0;
-  padding: 0;
-}
-
-#phjiwacvbw .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#phjiwacvbw .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#phjiwacvbw .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#phjiwacvbw .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#phjiwacvbw .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#phjiwacvbw .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#phjiwacvbw .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#phjiwacvbw .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#phjiwacvbw .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#phjiwacvbw .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#phjiwacvbw .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#phjiwacvbw .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#phjiwacvbw .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#phjiwacvbw .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#phjiwacvbw .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#phjiwacvbw .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#phjiwacvbw .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#phjiwacvbw .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#phjiwacvbw .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#phjiwacvbw .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#phjiwacvbw .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#phjiwacvbw .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#phjiwacvbw .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#phjiwacvbw .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#phjiwacvbw .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#phjiwacvbw .gt_left {
-  text-align: left;
-}
-
-#phjiwacvbw .gt_center {
-  text-align: center;
-}
-
-#phjiwacvbw .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#phjiwacvbw .gt_font_normal {
-  font-weight: normal;
-}
-
-#phjiwacvbw .gt_font_bold {
-  font-weight: bold;
-}
-
-#phjiwacvbw .gt_font_italic {
-  font-style: italic;
-}
-
-#phjiwacvbw .gt_super {
-  font-size: 65%;
-}
-
-#phjiwacvbw .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#phjiwacvbw .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#phjiwacvbw .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#phjiwacvbw .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#phjiwacvbw .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#phjiwacvbw .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#phjiwacvbw .gt_indent_5 {
-  text-indent: 25px;
-}
-</style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Team">Team</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Completed">Completed</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Attempted">Attempted</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Completion Percentage">Completion Percentage</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="Team" class="gt_row gt_left">Miami Dolphins</td>
-<td headers="Cmp" class="gt_row gt_right">265</td>
-<td headers="Att" class="gt_row gt_right">380</td>
-<td headers="CmpPct" class="gt_row gt_right">69.7</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Kansas City Chiefs</td>
-<td headers="Cmp" class="gt_row gt_right">283</td>
-<td headers="Att" class="gt_row gt_right">417</td>
-<td headers="CmpPct" class="gt_row gt_right">67.9</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">San Francisco 49ers</td>
-<td headers="Cmp" class="gt_row gt_right">216</td>
-<td headers="Att" class="gt_row gt_right">309</td>
-<td headers="CmpPct" class="gt_row gt_right">69.9</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Jacksonville Jaguars</td>
-<td headers="Cmp" class="gt_row gt_right">254</td>
-<td headers="Att" class="gt_row gt_right">377</td>
-<td headers="CmpPct" class="gt_row gt_right">67.4</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Philadelphia Eagles</td>
-<td headers="Cmp" class="gt_row gt_right">242</td>
-<td headers="Att" class="gt_row gt_right">358</td>
-<td headers="CmpPct" class="gt_row gt_right">67.6</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Los Angeles Rams</td>
-<td headers="Cmp" class="gt_row gt_right">226</td>
-<td headers="Att" class="gt_row gt_right">380</td>
-<td headers="CmpPct" class="gt_row gt_right">59.5</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Baltimore Ravens</td>
-<td headers="Cmp" class="gt_row gt_right">233</td>
-<td headers="Att" class="gt_row gt_right">342</td>
-<td headers="CmpPct" class="gt_row gt_right">68.1</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Tampa Bay Buccaneers</td>
-<td headers="Cmp" class="gt_row gt_right">246</td>
-<td headers="Att" class="gt_row gt_right">382</td>
-<td headers="CmpPct" class="gt_row gt_right">64.4</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Cincinnati Bengals</td>
-<td headers="Cmp" class="gt_row gt_right">271</td>
-<td headers="Att" class="gt_row gt_right">406</td>
-<td headers="CmpPct" class="gt_row gt_right">66.7</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">Cleveland Browns</td>
-<td headers="Cmp" class="gt_row gt_right">217</td>
-<td headers="Att" class="gt_row gt_right">391</td>
-<td headers="CmpPct" class="gt_row gt_right">55.5</td></tr>
-    <tr><td headers="Team" class="gt_row gt_left">New York Jets</td>
-<td headers="Cmp" class="gt_row gt_right">225</td>
-<td headers="Att" class="gt_row gt_right">376</td>
-<td headers="CmpPct" class="gt_row gt_right">59.8</td></tr>
-  </tbody>
-  
-  
-</table>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</div>
+<p>Overall, the Kansas City Chiefs are on pace to win another Lombardi Trophy. Their offense is once again unstoppable, but something is different this year. The Chiefs defense is finally stepping up to the plate. With such dominate defense, the Chiefs are in a great position for playing in their second straight Super Bowl.</p>
+<p>The Kansas City Chiefs will be a force to be reckon with in the post season in hopes of making another Super Bowl appearance in 2024.</p>
 
 
 
